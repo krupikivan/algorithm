@@ -1,0 +1,89 @@
+
+  const int aAscii = 97;
+
+void main() {
+  String input = 'dog';
+  String output = "";
+  List<String> list = input.split("");
+  for(var i=0; i < list.length; i++){
+    
+    Point nPointActual = getPoint(list[i]);
+    
+    Point nPointBefore = i == 0 ? Point(x:0,y:0) : getPoint(list[i-1]);
+    
+    output += getRoute(nPointActual, nPointBefore, true);
+    if("!".allMatches(output).length == input.length){
+      break;
+    }else{
+     output += backToHome(nPointActual); 
+    }
+  }
+
+  print(output);
+}
+
+String backToHome(Point actual){
+  String output = "";
+  for(var i = 0; i < actual.x; i++){
+      if(actual.x > 0){
+        output += "l";
+      }
+    }
+  for(var i = 0; i < actual.y; i++){
+      if(actual.y > 0){
+        output += "u";
+      }
+  }
+  return output;
+ }
+
+String getRoute(Point pActual, Point pBefore, bool change){
+  String output = "";
+  // Horizontal first
+  for(var i = 0; i < pActual.x; i++){
+    if(pActual.x > pBefore.x){ // Move right
+      output += "r";
+    }else if (pActual.x < pBefore.x){ // Move left
+      output += "l";
+    }
+  }
+  // Vertical second
+  for(var i = 0; i < pActual.y; i++){
+    if(pActual.y > pBefore.y){ // Move right
+      output += "d";
+    }else if(pActual.y < pBefore.y){ // Move left
+      output += "u";
+    }
+  }
+  if(change){
+  output += "!";  
+  }
+    return output;
+}
+
+Point getPoint(String n){
+  int nAscii = n.codeUnits[0];
+  int diffX = ((nAscii - aAscii) % 7).floor();
+  int mod =  ((nAscii - aAscii) / 7).floor();
+  print("$n es x $diffX, y $mod");
+  Point p = Point(x: diffX, y:mod);
+  return p;
+}
+
+
+class Point {
+  int x;
+  int y;
+  
+  Point({this.x,this.y});
+}
+
+/*
+A B C D E F G
+
+H I J K L M N
+  
+O P Q R S T U
+  
+V W X Y Z
+*/
